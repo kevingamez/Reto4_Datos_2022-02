@@ -24,6 +24,7 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
+from DISClib.ADT import stack as stack
 assert cf
 
 
@@ -44,7 +45,7 @@ def printMenu():
     print("5- Informar las estaciones “alcanzables” desde un origen a un número máximo de conexiones")
     print("6- Buscar el camino con mínima distancia entre una estación de origen y un vecindario de destino (G)")
     print("7- Encontrar un posible camino circular desde una estación de origen (G)")
-    print("8- Graficar resultados para cada uno de los requerimientos (B)")
+    print("8- Graficar resultados para cada uno de los requerimientos (B) \n")
 
 catalog = None
 
@@ -53,10 +54,9 @@ Menu principal
 """
 while True:
     printMenu()
-
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 0:
-        print("Cargando información de los archivos ....")
+        print("Cargando información de los archivos ....\n")
         file_nodes = cf.data_dir + 'Barcelona/bus_stops_bcn-utf8-large.csv'
         file_edges = cf.data_dir + 'Barcelona/bus_edges_bcn-utf8-large.csv'
         catalog = controller.init()
@@ -70,9 +70,22 @@ while True:
         print(' [Latitud mínima, Latitud máxima]: [' + str(catalog['cordenadas_min'][0]) + ', ' + str(catalog['cordenadas_max'][0]) + ']')
         
     elif int(inputs[0]) == 1:
-        pass
+        initial = input("Ingrese la estación de origen: ")
+        final = input("Ingrese la estación de destino: ")
+        controller.req_1(catalog, initial, final)
     elif int(inputs[0]) == 2:
-        pass
+        initial = input("Ingrese la estación de origen: ")
+        final = input("Ingrese la estación de destino: ")
+        path, distance, estaciones, transbordos = controller.req_2(catalog, initial, final)
+        print('La distancia total del camino entre la estación ' + initial + ' y la estación ' + final + ' es: ' + str(distance))
+        print('El número de estaciones en el camino es: ' + str(estaciones))
+        print('El número de transbordos en el camino es: ' + str(transbordos))
+        if path is not None:
+            pathlen = stack.size(path)
+            while (not stack.isEmpty(path)):
+                stop = stack.pop(path)
+                print(stop)
+
     elif int(inputs[0]) == 3:
         pass
     elif int(inputs[0]) == 4:

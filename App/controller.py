@@ -51,6 +51,7 @@ def loadEdges(analyzer, file):
         model.add_connection(analyzer, initial, final)
     model.trasbordos(analyzer)
 
+
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
@@ -65,3 +66,9 @@ def get_size_unique_stops(analyzer):
 
 def get_num_connections(analyzer):
     return model.get_num_connections(analyzer)
+
+def req_1(analyzer, initial, final):
+    return model.req_1(analyzer, initial, final)
+
+def req_2(analyzer, initial, final):
+    return model.req_2(analyzer, initial, final)

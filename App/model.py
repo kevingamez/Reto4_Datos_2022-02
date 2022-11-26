@@ -31,6 +31,11 @@ from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import mergesort as mg
+
+from DISClib.Algorithms.Graphs import dijsktra as djk
+from DISClib.Algorithms.Graphs import bfs as bfs
+from DISClib.Algorithms.Graphs import dfs as dfs
+
 from DISClib.Utils import error as error
 from DISClib.ADT import graph as gr
 from haversine import haversine, Unit
@@ -117,8 +122,6 @@ def add_connection(analyzer, initial, final):
         cor_final = (lat, lon)
         distance = haversine(cor_initial, cor_final)
         
-        if analyzer['stops']:
-            distance = 0
         gr.addEdge(analyzer['graph'], initial, final, distance)
         gr.addEdge(analyzer['graph'], final, initial, distance)
 
@@ -141,10 +144,49 @@ def trasbordos(analyzer):
 # Funciones para creacion de datos
 
 # Funciones de consulta
+def req_1(analyzer, initial, final):
+    search = dfs.DepthFirstSearch(analyzer['graph'], initial)
+    path = dfs.pathTo(search, final)
+    distane = 0
+    estaciones = 0
+    transbordos = 0 
+    if path is not None:
+        distane = djk.distTo(search, final)
+        for vertex in lt.iterator(path):
+            if vertex.split('-')[0] == 'T':
+                transbordos += 1
+            else:
+                estaciones += 1
+    return path, distane, estaciones, transbordos
+
+
+def req_2(analyzer, initial, final):
+    search = bfs.BreadhtFisrtSearch(analyzer['graph'], initial)
+    path = bfs.pathTo(search, final)
+    distane = 0
+    estaciones = 0
+    transbordos = 0 
+    b = gr.edges(analyzer['graph'])
+    if path is not None:
+        distane = get_distance(analyzer, path, final)
+        for vertex in lt.iterator(path):
+            if vertex.split('-')[0] == 'T':
+                transbordos += 1
+            else:
+                estaciones += 1
+    return path, distane, estaciones, transbordos
+
+def get_distance(analyzer, path, final):
+    distance = 0
+    last = final
+    for vertex in lt.iterator(path):
+        edge = gr.getEdge(analyzer['graph'], last, vertex)
+        if edge is not None:
+            distance += edge['weight']
+        last = vertex
+    return distance
 
 # Funciones utilizadas para comparar elementos dentro de una lista
-
-# Funciones de ordenamiento
 def compareStopIds(stop1, stop2):
     if stop1 == stop2:
         return 0
@@ -152,6 +194,9 @@ def compareStopIds(stop1, stop2):
         return 1
     else:
         return -1
+
+# Funciones de ordenamiento
+
 
 def get_size_bus_routes(analyzer):
     return mp.size(analyzer['bus_routes'])
