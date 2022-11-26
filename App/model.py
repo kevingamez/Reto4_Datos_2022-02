@@ -53,8 +53,8 @@ def newAnalyzer():
             'transbordos' : None, 
             'stops' : None,
             'bus_routes' : None,
-            'cordenadas_min' : (1000000.0,1000000.0),
-            'cordenadas_max' : (1000000.0,1000000.0),
+            'cordenadas_min' : [1000000.0,1000000.0],
+            'cordenadas_max' : [0.0,0.0],
         }
 
         analyzer['graph'] = gr.newGraph(datastructure='ADJ_LIST', directed=True, size=1000, comparefunction=None)
@@ -72,7 +72,7 @@ def add_stop(analyzer, stop, transbordo, info):
     Adiciona una estación como un vértice del grafo
     """
     try:
-
+        compare_coordinates((float(info['Latitude']), float(info['Longitude'])), analyzer)
         if transbordo:
             # Si la estación permite transbordos se verifica si ya existe en el mapa, si no existe se agrega como vertice
             if not mp.contains(analyzer['transbordos'], stop.split('-')[0]):
@@ -92,6 +92,17 @@ def add_stop(analyzer, stop, transbordo, info):
             gr.insertVertex(analyzer['graph'], stop)
     except Exception as exp:
         error.reraise(exp, 'model:add_stop')
+
+def compare_coordinates(coor1, analyzer):
+    if coor1[0] < analyzer['cordenadas_min'][0]:
+        analyzer['cordenadas_min'][0] = coor1[0]
+    if coor1[1] < analyzer['cordenadas_min'][1]:
+        analyzer['cordenadas_min'][1] = coor1[1]
+    if coor1[0] > analyzer['cordenadas_max'][0]:
+        analyzer['cordenadas_max'][0] = coor1[0]
+    if coor1[1] > analyzer['cordenadas_max'][1]:
+        analyzer['cordenadas_max'][1] = coor1[1]
+
 
 def add_connection(analyzer, initial, final):
     """

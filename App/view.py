@@ -66,6 +66,8 @@ while True:
         print('Número de paradas de autobús excusivas cargadas: ' + str(controller.get_size_unique_stops(catalog)))
         print('Número de paradas de autobús compartidas cargadas: ' + str(controller.get_size_share_stops(catalog)))
         print('Número de arcos usados: ' + str(controller.get_num_connections(catalog)))
+        print('Rango del área rectangular de Barcelona \n [Longitud mínima, Longitud máxima]: [' + str(catalog['cordenadas_min'][1]) + ', ' + str(catalog['cordenadas_max'][1]) + ']')
+        print(' [Latitud mínima, Latitud máxima]: [' + str(catalog['cordenadas_min'][0]) + ', ' + str(catalog['cordenadas_max'][0]) + ']')
         
     elif int(inputs[0]) == 1:
         pass
