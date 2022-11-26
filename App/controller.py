@@ -30,9 +30,38 @@ El controlador se encarga de mediar entre la vista y el modelo.
 """
 
 # Inicialización del Catálogo de libros
-
+def init():
+    analyzer = model.newAnalyzer()
+    return analyzer
 # Funciones para la carga de datos
+def loadNodes(analyzer, file ):
+    input_file = csv.DictReader(open(file, encoding="utf-8"), delimiter=",")
+    for line in input_file:
+        ruta = line['Code'] + '-' + line['Bus_Stop'].split('-')[1].strip()
+        transbordo = line['Transbordo'] == 'S'
+        model.add_stop(analyzer, ruta, transbordo, line)
+    return analyzer
+
+def loadEdges(analyzer, file):
+    input_file = csv.DictReader(open(file, encoding="utf-8"), delimiter=",")
+    for line in input_file:
+        bus_stop = line['Bus_Stop'].split('-')[1].strip()
+        initial = line['Code'] + '-' + bus_stop 
+        final = line['Code_Destiny'] + '-' + bus_stop         
+        model.add_connection(analyzer, initial, final)
+    model.trasbordos(analyzer)
 
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
+def get_size_bus_routes(analyzer):
+    return model.get_size_bus_routes(analyzer)
+
+def get_size_share_stops(analyzer):
+    return model.get_size_share_stops(analyzer)
+
+def get_size_unique_stops(analyzer):
+    return model.get_size_unique_stops(analyzer)
+
+def get_num_connections(analyzer):
+    return model.get_num_connections(analyzer)

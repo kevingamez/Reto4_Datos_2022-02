@@ -100,7 +100,7 @@ def addFirst(lst, element):
     Raises:
         Exception
     """
-    try:
+    try: 
         lst['datastructure'].addFirst(lst, element)
     except Exception as exp:
         error.reraise(exp, 'TADList->addFirst: ')
