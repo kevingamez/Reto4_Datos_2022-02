@@ -73,6 +73,14 @@ while True:
         initial = input("Ingrese la estación de origen: ")
         final = input("Ingrese la estación de destino: ")
         controller.req_1(catalog, initial, final)
+        print('La distancia total del camino entre la estación ' + initial + ' y la estación ' + final + ' es: ' + str(distance))
+        print('El número de estaciones en el camino es: ' + str(estaciones))
+        print('El número de transbordos en el camino es: ' + str(transbordos))
+        if path is not None:
+            pathlen = stack.size(path)
+            while (not stack.isEmpty(path)):
+                stop = stack.pop(path)
+                print(stop)
     elif int(inputs[0]) == 2:
         initial = input("Ingrese la estación de origen: ")
         final = input("Ingrese la estación de destino: ")

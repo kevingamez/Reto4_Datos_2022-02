@@ -166,7 +166,6 @@ def req_2(analyzer, initial, final):
     distane = 0
     estaciones = 0
     transbordos = 0 
-    b = gr.edges(analyzer['graph'])
     if path is not None:
         distane = get_distance(analyzer, path, final)
         for vertex in lt.iterator(path):
